@@ -30,7 +30,9 @@ static const char *const autostart[] = {
 	"dunst", NULL,
 	"picom", NULL,
 	"dwmblocks", NULL,
-	"feh --bg-max --randomize /home/eppi/.local/share/backgrounds/", NULL,
+	"random_wallpaper", NULL,
+	"alacritty", NULL,
+	"flatpak", "run", "io.gitlab.librewolf-community", NULL,
 	NULL /* terminate */
 };
 
@@ -44,12 +46,12 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
-	{ "Alacritty", NULL,   "Alacritty",    0,         0,          1,           0,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor */
+	{ "Gimp",    NULL,     NULL,           0,         0,          activeopacity,	inactiveopacity,	0,          0,        -1 },
+	{ "LibreWolf", NULL,   NULL,           2,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1 },
+	{ "Alacritty", NULL,   "Alacritty",    1,         0,          activeopacity,	inactiveopacity,	1,          0,        -1 },
+	{ "mpv",     NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1 },
+	{ NULL,      NULL,     "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -82,9 +84,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu-run-extended", NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%",   NULL };
-static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%",   NULL };
-static const char *mute_vol[] = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+static const char *random_wallpaper[]  = { "random_wallpaper", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
