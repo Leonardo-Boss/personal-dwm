@@ -37,12 +37,12 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key */
-	{ "Gimp",    NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,       0  },
-	{ "Firefox", NULL,     NULL,           1 << 8,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0  },
-	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,      's' },
-	{ "mpv",     NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,       0  },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0  }, /* xev */
+	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key iscentered*/
+	{ "Gimp",    NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,       0,           0 },
+	{ "Firefox", NULL,     NULL,           1 << 8,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,           0 },
+	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,      's',          0 },
+	{ "mpv",     NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,       0,           0 },
+	{ NULL,      NULL,     "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,           0 }, /* xev */
 };
 
 /* layout(s) */
