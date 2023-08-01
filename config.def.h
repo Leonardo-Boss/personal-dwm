@@ -37,19 +37,22 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1 },
-	{ "Firefox", NULL,     NULL,           1 << 8,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1 },
-	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1 }, /* xev */
+	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key */
+	{ "Gimp",    NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,       0  },
+	{ "Firefox", NULL,     NULL,           1 << 8,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0  },
+	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,      's' },
+	{ "mpv",     NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,       0  },
+	{ NULL,      NULL,     "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0  }, /* xev */
 };
 
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
+
+/*First arg only serves to match against key in rules*/
+static const char *scratchpadcmd[] = {"s", "alacritty", NULL}; 
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -113,6 +116,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_s,      changefocusopacity,   {.f = -0.025}},
 	{ MODKEY|ShiftMask,             XK_z,      changeunfocusopacity, {.f = +0.025}},
     { MODKEY|ShiftMask,             XK_x,      changeunfocusopacity, {.f = -0.025}},
+	{ MODKEY,                       XK_s,  togglescratch,  {.v = scratchpadcmd } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)

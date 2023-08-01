@@ -9,7 +9,7 @@ static const unsigned int borderpx  = 5;        /* border pixel of windows */
 static const unsigned int gappx     = 6;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating    = 1;        /* 1 means swallow floating windows by default */
-static const int showbar            = 1;        /* 0 means no bar */
+static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const double activeopacity   = 1;     /* Window opacity when it's focused (0 <= opacity <= 1) */
 static const double inactiveopacity = 0.9f;     /* Window opacity when it's inactive (0 <= opacity <= 1) */
@@ -46,19 +46,25 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         0,          activeopacity,	inactiveopacity,	0,          0,        -1 },
-	{ "LibreWolf", NULL,   NULL,           2,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1 },
-	{ "Alacritty", NULL,   "Alacritty",    1,         0,          activeopacity,	inactiveopacity,	1,          0,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1 }, /* xev */
+	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key */
+	{ "LibreWolf", NULL,     NULL,         2,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0  },
+	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0  },
+	{ "Alacritty", NULL,   "scratchterm",  0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,      's' },
+	{ NULL,        "pavuscratch", NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'v' },
+	{ NULL,        "spotify",     NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'm' },
+	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0  }, /* xev */
 };
 
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
+
+/*First arg only serves to match against key in rules*/
+static const char *scratchpadcmd[] = {"s", "alacritty", "-T", "scratchterm", NULL}; 
+static const char *scratchpadpavucontrol[] = {"v", "pavuscratch", NULL}; 
+static const char *scratchpadspotify[] = {"m", "flatpak", "run", "com.spotify.Client", NULL}; 
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -85,6 +91,16 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu-run-extended", NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *random_wallpaper[]  = { "random_wallpaper", NULL };
+static const char *compiledwm[] = { "compiledwm", NULL };
+static const char *dark_toggle[] = { "darkman", "toggle", NULL };
+
+/* void */
+/* compile_restart(const Arg arg) */
+/* { */
+/*     spawn(arg); */
+/*     static Arg qarg = {1}; */
+/*     quit(qarg); */
+/* } */
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -122,6 +138,10 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_s,      changefocusopacity,   {.f = -0.1}},
 	{ MODKEY|ShiftMask,             XK_z,      changeunfocusopacity, {.f = +0.1}},
     { MODKEY|ShiftMask,             XK_x,      changeunfocusopacity, {.f = -0.1}},
+    { MODKEY|ShiftMask,             XK_t,      spawn,          {.v = dark_toggle }},
+	{ MODKEY,                       XK_s,  togglescratch,  {.v = scratchpadcmd } },
+	{ MODKEY,                       XK_v,  togglescratch,  {.v = scratchpadpavucontrol } },
+	{ MODKEY,                       XK_m,  togglescratch,  {.v = scratchpadspotify } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -132,7 +152,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} }, 
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit, {1} }, 
 };
 
 /* button definitions */
@@ -147,6 +167,7 @@ static const Button buttons[] = {
 	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
 	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
 	{ ClkStatusText,        ShiftMask,      Button1,        sigstatusbar,   {.i = 6} },
+	{ ClkStatusText,        ShiftMask,      Button3,        spawn,          SHCMD("alacritty -e nvim ~/Downloads/git/dwmblocks-async/config.c")},
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
