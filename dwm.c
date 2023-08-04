@@ -98,7 +98,7 @@ struct Client {
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
 	int bw, oldbw;
 	unsigned int tags;
-	int isfixed, iscentered, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow;
+	int isfixed, iscentered, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow, noborders;
 	char scratchkey;
 	int issteam;
 	pid_t pid;
@@ -159,6 +159,7 @@ typedef struct {
 	int monitor;
 	const char scratchkey;
 	int iscentered;
+    int noborders;
 } Rule;
 
 /* function declarations */
@@ -394,6 +395,7 @@ applyrules(Client *c)
 			c->scratchkey = r->scratchkey;
 			c->opacity = r->opacity;
 			c->unfocusopacity = r->unfocusopacity;
+            c->noborders = r->noborders;
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
@@ -1329,7 +1331,12 @@ manage(Window w, XWindowAttributes *wa)
 		c->y = c->mon->wy + c->mon->wh - HEIGHT(c);
 	c->x = MAX(c->x, c->mon->wx);
 	c->y = MAX(c->y, c->mon->wy);
-	c->bw = borderpx;
+    if (c->noborders) {
+        c->bw = 0;
+    }
+    else {
+        c->bw = borderpx;
+    }
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);

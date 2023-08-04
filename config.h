@@ -46,13 +46,14 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key iscentered*/
-	{ "LibreWolf", NULL,     NULL,         2,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0 },
-	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,	        0 },
-	{ "Alacritty", NULL,   "scratchterm",  0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,      's',         1 },
-	{ NULL,        "pavuscratch", NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'v',         1 },
-	{ NULL,        "spotify",     NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'm',         1 },
-	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,	        0 }, /* xev */
+	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key iscentered noborders*/
+	{ "LibreWolf", NULL,     NULL,         2,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
+	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,	        0,         0 },
+	{ "Alacritty", NULL,   "scratchterm",  0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,      's',         1,         0 },
+	{ NULL,        "pavuscratch", NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'v',         1,         0 },
+	{ NULL,        "spotify",     NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'm',         1,         0 },
+	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,	        0,         0 }, /* xev */
+	{ "mpv",       NULL,     NULL,         0,         0,          0.1,            	inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 };
 
 /* layout(s) */
@@ -91,16 +92,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu-run-extended", NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *random_wallpaper[]  = { "random_wallpaper", NULL };
-static const char *compiledwm[] = { "compiledwm", NULL };
 static const char *dark_toggle[] = { "darkman", "toggle", NULL };
-
-/* void */
-/* compile_restart(const Arg arg) */
-/* { */
-/*     spawn(arg); */
-/*     static Arg qarg = {1}; */
-/*     quit(qarg); */
-/* } */
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -115,7 +107,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
@@ -132,16 +124,16 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_Page_Up, shiftview,     {.i = +1 } },
 	{ MODKEY,                       XK_Page_Down, shiftview,   {.i = -1 } },
-    { 0,        	                XK_Print, spawn,	       SHCMD("/home/eppi/.local/bin/screenshot") },
-    { ShiftMask,	                XK_Print, spawn,	       SHCMD("/home/eppi/.local/bin/screenshotsel") },
+    { 0,        	                XK_Print,  spawn,	       SHCMD("/home/eppi/.local/bin/screenshot") },
+    { ShiftMask,	                XK_Print,  spawn,	       SHCMD("/home/eppi/.local/bin/screenshotsel") },
     { MODKEY|ShiftMask,             XK_a,      changefocusopacity,   {.f = +0.1}},
     { MODKEY|ShiftMask,             XK_s,      changefocusopacity,   {.f = -0.1}},
 	{ MODKEY|ShiftMask,             XK_z,      changeunfocusopacity, {.f = +0.1}},
     { MODKEY|ShiftMask,             XK_x,      changeunfocusopacity, {.f = -0.1}},
     { MODKEY|ShiftMask,             XK_t,      spawn,          {.v = dark_toggle }},
-	{ MODKEY,                       XK_s,  togglescratch,  {.v = scratchpadcmd } },
-	{ MODKEY,                       XK_v,  togglescratch,  {.v = scratchpadpavucontrol } },
-	{ MODKEY,                       XK_m,  togglescratch,  {.v = scratchpadspotify } },
+	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
+	{ MODKEY,                       XK_v,      togglescratch,  {.v = scratchpadpavucontrol } },
+	{ MODKEY,                       XK_m,      togglescratch,  {.v = scratchpadspotify } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -152,7 +144,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit, {1} }, 
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} }, 
 };
 
 /* button definitions */
