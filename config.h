@@ -33,6 +33,7 @@ static const char *const autostart[] = {
 	"random_wallpaper", NULL,
 	"alacritty", NULL,
 	"flatpak", "run", "io.gitlab.librewolf-community", NULL,
+    "ibus", "start", NULL,
 	NULL /* terminate */
 };
 
@@ -48,12 +49,14 @@ static const Rule rules[] = {
 	 */
 	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key iscentered noborders*/
 	{ "LibreWolf", NULL,     NULL,         2,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
-	{ "Alacritty", NULL,   "Alacritty",    0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,	        0,         0 },
+	{ "discord",   NULL,     NULL,         3,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
+	{ "Alacritty", NULL,     NULL,         0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,	        0,         0 },
 	{ "Alacritty", NULL,   "scratchterm",  0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,      's',         1,         0 },
 	{ NULL,        "pavuscratch", NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'v',         1,         0 },
 	{ NULL,        "spotify",     NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'm',         1,         0 },
+	{ "org.gnome.Nautilus", NULL, NULL,    0,         0,          activeopacity,	inactiveopacity,	0,          0,        -1,      'n',         1,         0 },
 	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,	        0,         0 }, /* xev */
-	{ "mpv",       NULL,     NULL,         0,         0,          0.1,            	inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
+	{ "mpv",       NULL,     NULL,         0,         0,          1,            	inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 };
 
 /* layout(s) */
@@ -66,6 +69,7 @@ static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen win
 static const char *scratchpadcmd[] = {"s", "alacritty", "-T", "scratchterm", NULL}; 
 static const char *scratchpadpavucontrol[] = {"v", "pavuscratch", NULL}; 
 static const char *scratchpadspotify[] = {"m", "flatpak", "run", "com.spotify.Client", NULL}; 
+static const char *scratchpadnautilus[] = {"n", "nautilus", NULL}; 
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -132,8 +136,9 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_x,      changeunfocusopacity, {.f = -0.1}},
     { MODKEY|ShiftMask,             XK_t,      spawn,          {.v = dark_toggle }},
 	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
-	{ MODKEY,                       XK_v,      togglescratch,  {.v = scratchpadpavucontrol } },
-	{ MODKEY,                       XK_m,      togglescratch,  {.v = scratchpadspotify } },
+	{ MODKEY|ShiftMask,             XK_v,      togglescratch,  {.v = scratchpadpavucontrol } },
+	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = scratchpadspotify } },
+	{ MODKEY|ShiftMask,             XK_n,      togglescratch,  {.v = scratchpadnautilus } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
