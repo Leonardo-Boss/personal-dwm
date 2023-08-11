@@ -33,6 +33,7 @@ static const char *const autostart[] = {
 	"random_wallpaper", NULL,
 	"alacritty", NULL,
 	"flatpak", "run", "io.gitlab.librewolf-community", NULL,
+	"flatpak", "run", "com.discordapp.Discord", NULL,
     "ibus", "start", NULL,
 	NULL /* terminate */
 };
@@ -49,7 +50,7 @@ static const Rule rules[] = {
 	 */
 	/* class     instance  title           tags mask  isfloating  opacity       	unfocusopacity  	isterminal  noswallow  monitor  scratch key iscentered noborders*/
 	{ "LibreWolf", NULL,     NULL,         2,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
-	{ "discord",   NULL,     NULL,         3,         0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
+	{ "discord",   NULL,     NULL,         1 << 2,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
 	{ "Alacritty", NULL,     NULL,         0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,	        0,         0 },
 	{ "Alacritty", NULL,   "scratchterm",  0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,      's',         1,         0 },
 	{ NULL,        "pavuscratch", NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'v',         1,         0 },
@@ -76,7 +77,7 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
-	/* { "TTT",      bstack }, */
+	{ "TTT",      bstack },
 	{ NULL,       NULL },
 };
 
@@ -118,7 +119,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	/* { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} }, */
+	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY|ControlMask,	        XK_comma,  cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
