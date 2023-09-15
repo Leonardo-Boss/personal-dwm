@@ -13,7 +13,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const double activeopacity   = 1;     /* Window opacity when it's focused (0 <= opacity <= 1) */
 static const double inactiveopacity = 0.9f;     /* Window opacity when it's inactive (0 <= opacity <= 1) */
-static const char *fonts[]          = { "monospace:size=10" };
+static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -58,6 +58,8 @@ static const Rule rules[] = {
 	{ "org.gnome.Nautilus", NULL, NULL,    0,         0,          activeopacity,	inactiveopacity,	0,          0,        -1,      'n',         1,         0 },
 	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,	        0,         0 }, /* xev */
 	{ "mpv",       NULL,     NULL,         0,         0,          1,            	inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
+	{ "csgo_linux64", NULL,  NULL,         0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
+	{ NULL,        NULL,  "Poly Bridge 2", 0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 };
 
 /* layout(s) */
@@ -78,6 +80,7 @@ static const Layout layouts[] = {
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "TTT",      bstack },
+	{ "[D]",      deck },
 	{ NULL,       NULL },
 };
 
@@ -98,6 +101,9 @@ static const char *dmenucmd[] = { "dmenu-run-extended", NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *random_wallpaper[]  = { "random_wallpaper", NULL };
 static const char *dark_toggle[] = { "darkman", "toggle", NULL };
+static const char *brightnessup[] = { "ddcutil", "setvcp", "10", "100", NULL };
+static const char *brightnessdown[] = { "ddcutil", "setvcp", "10", "0", NULL };
+static const char *screensaveroff[] = { "systemctl", "--user", "stop", "xscreensaver", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -120,6 +126,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY|ControlMask,	        XK_comma,  cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
@@ -130,10 +137,12 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_Page_Up, shiftview,     {.i = +1 } },
-	{ MODKEY,                       XK_Page_Down, shiftview,   {.i = -1 } },
+	{ MODKEY,                       XK_Page_Up, spawn,         {.v = brightnessup } },
+	{ MODKEY,                       XK_Page_Down, spawn,       {.v = brightnessdown } },
     { 0,        	                XK_Print,  spawn,	       SHCMD("/home/eppi/.local/bin/screenshot") },
     { ShiftMask,	                XK_Print,  spawn,	       SHCMD("/home/eppi/.local/bin/screenshotsel") },
+    { MODKEY|ShiftMask,	            XK_c,      spawn,	       SHCMD("/home/eppi/.local/bin/toggle_xscreensaver") },
+    { MODKEY|ShiftMask,	            XK_b,      spawn,	       SHCMD("/home/eppi/.local/bin/xscreensaver_sleep") },
     { MODKEY|ShiftMask,             XK_a,      changefocusopacity,   {.f = +0.1}},
     { MODKEY|ShiftMask,             XK_s,      changefocusopacity,   {.f = -0.1}},
 	{ MODKEY|ShiftMask,             XK_z,      changeunfocusopacity, {.f = +0.1}},
