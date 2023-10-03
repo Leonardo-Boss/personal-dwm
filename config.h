@@ -35,6 +35,7 @@ static const char *const autostart[] = {
 	"flatpak", "run", "io.gitlab.librewolf-community", NULL,
 	"flatpak", "run", "com.discordapp.Discord", NULL,
     "ibus", "start", NULL,
+    "unclutter", "--timeout", "1", NULL,
 	NULL /* terminate */
 };
 
@@ -53,11 +54,12 @@ static const Rule rules[] = {
 	{ "discord",   NULL,     NULL,         1 << 2,    0,          activeopacity,	inactiveopacity,	0,         -1,        -1,       0,	        0,         0 },
 	{ "Alacritty", NULL,     NULL,         0,         0,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,	        0,         0 },
 	{ "Alacritty", NULL,   "scratchterm",  0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,      's',         1,         0 },
+	{ "Alacritty", NULL,   "weather",      0,         1,          activeopacity,	inactiveopacity,	1,          0,        -1,       0,          1,         0 },
 	{ NULL,        "pavuscratch", NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'v',         1,         0 },
 	{ NULL,        "spotify",     NULL,    0,         1,          activeopacity,	inactiveopacity,	0,          0,        -1,      'm',         1,         0 },
 	{ "org.gnome.Nautilus", NULL, NULL,    0,         0,          activeopacity,	inactiveopacity,	0,          0,        -1,      'n',         1,         0 },
 	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,	        0,         0 }, /* xev */
-	{ "mpv",       NULL,     NULL,         0,         0,          1,            	inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
+	{ "mpv",       NULL,     NULL,         0,         0,          1,            	1,                  0,          0,        -1,       0,	        0,         1 },
 	{ "csgo_linux64", NULL,  NULL,         0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 	{ NULL,        NULL,  "Poly Bridge 2", 0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 };
