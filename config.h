@@ -13,7 +13,8 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const double activeopacity   = 1;     /* Window opacity when it's focused (0 <= opacity <= 1) */
 static const double inactiveopacity = 0.9f;     /* Window opacity when it's inactive (0 <= opacity <= 1) */
-static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
+//static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
+static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -30,12 +31,12 @@ static const char *const autostart[] = {
 	"dunst", NULL,
 	"picom", NULL,
 	"dwmblocks", NULL,
-	"random_wallpaper", NULL,
+//	"random_wallpaper", NULL,
 	"alacritty", NULL,
 	"flatpak", "run", "io.gitlab.librewolf-community", NULL,
 	"flatpak", "run", "com.discordapp.Discord", NULL,
-    "ibus", "start", NULL,
-    "unclutter", "--timeout", "1", NULL,
+	"ibus", "start", NULL,
+	"unclutter", "--timeout", "1", NULL,
 	NULL /* terminate */
 };
 
@@ -106,6 +107,15 @@ static const char *dark_toggle[] = { "darkman", "toggle", NULL };
 static const char *brightnessup[] = { "ddcutil", "setvcp", "10", "100", NULL };
 static const char *brightnessdown[] = { "ddcutil", "setvcp", "10", "0", NULL };
 static const char *screensaveroff[] = { "systemctl", "--user", "stop", "xscreensaver", NULL };
+static const char *brighter[] = { "brightnessctl", "set", "10%+", NULL };
+static const char *dimmer[]   = { "brightnessctl", "set", "10%-", NULL };
+static const char *mute_mic[] = { "pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
+static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%",   NULL };
+static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%",   NULL };
+static const char *mute_vol[] = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+static const char *medplaypausecmd[] = { "playerctl", "play-pause", NULL };
+static const char *mednextcmd[] = { "playerctl", "next", NULL };
+static const char *medprevcmd[] = { "playerctl", "previous", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -141,15 +151,24 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_Page_Up, spawn,         {.v = brightnessup } },
 	{ MODKEY,                       XK_Page_Down, spawn,       {.v = brightnessdown } },
-    { 0,        	                XK_Print,  spawn,	       SHCMD("/home/eppi/.local/bin/screenshot") },
-    { ShiftMask,	                XK_Print,  spawn,	       SHCMD("/home/eppi/.local/bin/screenshotsel") },
-    { MODKEY|ShiftMask,	            XK_c,      spawn,	       SHCMD("/home/eppi/.local/bin/toggle_xscreensaver") },
-    { MODKEY|ShiftMask,	            XK_b,      spawn,	       SHCMD("/home/eppi/.local/bin/xscreensaver_sleep") },
-    { MODKEY|ShiftMask,             XK_a,      changefocusopacity,   {.f = +0.1}},
-    { MODKEY|ShiftMask,             XK_s,      changefocusopacity,   {.f = -0.1}},
+	{ 0,        	                XK_Print,  spawn,	SHCMD("/home/eppi/.local/bin/screenshot") },
+	{ ShiftMask,	                XK_Print,  spawn,	SHCMD("/home/eppi/.local/bin/screenshotsel") },
+	{ MODKEY|ShiftMask,		XK_c,      spawn,	SHCMD("/home/eppi/.local/bin/toggle_xscreensaver") },
+	{ MODKEY|ShiftMask,		XK_b,      spawn,	SHCMD("/home/eppi/.local/bin/xscreensaver_sleep") },
+	{ 0,				XF86XK_AudioMute,        spawn, {.v = mute_vol } },
+	{ 0,				XF86XK_AudioLowerVolume, spawn, {.v = down_vol } },
+	{ 0,				XF86XK_AudioRaiseVolume, spawn, {.v = up_vol } },
+	{ 0,				XF86XK_MonBrightnessDown, spawn, {.v = dimmer } },
+	{ 0,				XF86XK_MonBrightnessUp,   spawn, {.v = brighter } },
+	{ 0,				XF86XK_AudioMicMute,	 spawn, {.v = mute_mic } },
+	{ 0,				XF86XK_AudioPlay, spawn, {.v = medplaypausecmd } },
+	{ 0,				XF86XK_AudioNext, spawn, {.v = mednextcmd } },
+	{ 0,				XF86XK_AudioPrev, spawn, {.v = medprevcmd } },
+	{ MODKEY|ShiftMask,             XK_a,      changefocusopacity,   {.f = +0.1}},
+	{ MODKEY|ShiftMask,             XK_s,      changefocusopacity,   {.f = -0.1}},
 	{ MODKEY|ShiftMask,             XK_z,      changeunfocusopacity, {.f = +0.1}},
-    { MODKEY|ShiftMask,             XK_x,      changeunfocusopacity, {.f = -0.1}},
-    { MODKEY|ShiftMask,             XK_t,      spawn,          {.v = dark_toggle }},
+	{ MODKEY|ShiftMask,             XK_x,      changeunfocusopacity, {.f = -0.1}},
+	{ MODKEY|ShiftMask,             XK_t,      spawn,          {.v = dark_toggle }},
 	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_v,      togglescratch,  {.v = scratchpadpavucontrol } },
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = scratchpadspotify } },
