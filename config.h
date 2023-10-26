@@ -13,8 +13,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const double activeopacity   = 1;     /* Window opacity when it's focused (0 <= opacity <= 1) */
 static const double inactiveopacity = 0.9f;     /* Window opacity when it's inactive (0 <= opacity <= 1) */
-//static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
-static const char *fonts[]          = { "monospace:size=10" };
+static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -31,7 +30,7 @@ static const char *const autostart[] = {
 	"dunst", NULL,
 	"picom", NULL,
 	"dwmblocks", NULL,
-//	"random_wallpaper", NULL,
+	"random_wallpaper", NULL,
 	"alacritty", NULL,
 	"flatpak", "run", "io.gitlab.librewolf-community", NULL,
 	"flatpak", "run", "com.discordapp.Discord", NULL,
@@ -62,6 +61,7 @@ static const Rule rules[] = {
 	{ NULL,        NULL,   "Event Tester", 0,         0,          activeopacity,	inactiveopacity,	0,          1,        -1,       0,	        0,         0 }, /* xev */
 	{ "mpv",       NULL,     NULL,         0,         0,          1,            	1,                  0,          0,        -1,       0,	        0,         1 },
 	{ "csgo_linux64", NULL,  NULL,         0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
+	{ "cs2",       NULL,     NULL,         0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 	{ NULL,        NULL,  "Poly Bridge 2", 0,         0,          activeopacity,    inactiveopacity,    0,          0,        -1,       0,	        0,         1 },
 };
 
@@ -72,10 +72,10 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
 
 /*First arg only serves to match against key in rules*/
-static const char *scratchpadcmd[] = {"s", "alacritty", "-T", "scratchterm", NULL}; 
-static const char *scratchpadpavucontrol[] = {"v", "pavuscratch", NULL}; 
-static const char *scratchpadspotify[] = {"m", "flatpak", "run", "com.spotify.Client", NULL}; 
-static const char *scratchpadnautilus[] = {"n", "nautilus", NULL}; 
+static const char *scratchpadcmd[] = {"s", "alacritty", "-T", "scratchterm", NULL};
+static const char *scratchpadpavucontrol[] = {"v", "pavuscratch", NULL};
+static const char *scratchpadspotify[] = {"m", "flatpak", "run", "com.spotify.Client", NULL};
+static const char *scratchpadnautilus[] = {"n", "nautilus", NULL};
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -183,7 +183,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} }, 
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },
 };
 
 /* button definitions */
