@@ -12,7 +12,7 @@ static const int swallowfloating    = 1;        /* 1 means swallow floating wind
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const double activeopacity   = 1;     /* Window opacity when it's focused (0 <= opacity <= 1) */
-static const double inactiveopacity = 0.9f;     /* Window opacity when it's inactive (0 <= opacity <= 1) */
+static const double inactiveopacity = 1;     /* Window opacity when it's inactive (0 <= opacity <= 1) */
 static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
@@ -116,10 +116,12 @@ static const char *mute_vol[] = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", 
 static const char *medplaypausecmd[] = { "playerctl", "play-pause", NULL };
 static const char *mednextcmd[] = { "playerctl", "next", NULL };
 static const char *medprevcmd[] = { "playerctl", "previous", NULL };
+static const char *fav[] = { "fav", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,						XK_f,      spawn,          {.v = fav } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -135,7 +137,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} },
@@ -151,8 +153,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_Page_Up, spawn,         {.v = brightnessup } },
 	{ MODKEY,                       XK_Page_Down, spawn,       {.v = brightnessdown } },
-	{ 0,        	                XK_Print,  spawn,	SHCMD("/home/eppi/.local/bin/screenshot") },
-	{ ShiftMask,	                XK_Print,  spawn,	SHCMD("/home/eppi/.local/bin/screenshotsel") },
+	{ 0,        	                XK_Print,  spawn,	SHCMD("/home/eppi/scripts/screenshot") },
+	{ ShiftMask,	                XK_Print,  spawn,	SHCMD("/home/eppi/scripts/screenshotsel") },
 	{ MODKEY|ShiftMask,		XK_c,      spawn,	SHCMD("/home/eppi/.local/bin/toggle_xscreensaver") },
 	{ MODKEY|ShiftMask,		XK_b,      spawn,	SHCMD("/home/eppi/.local/bin/xscreensaver_sleep") },
 	{ 0,				XF86XK_AudioMute,        spawn, {.v = mute_vol } },
